@@ -5,13 +5,13 @@
 # * @author:soc
 # * @date:2016-04-13 10:48 
 # * @version 0.5
-# * @description: ¶ÔÉÏÓÎ´úÀíÉÌ½øĞĞ³£ping²Ù×÷,¼ÇÂ¼ÎÒ·½µ½¶Ô·½´úÀíÉÌµÄÍøÂç×´¿ö
+# * @description: å¯¹ä¸Šæ¸¸ä»£ç†å•†è¿›è¡Œå¸¸pingæ“ä½œ,è®°å½•æˆ‘æ–¹åˆ°å¯¹æ–¹ä»£ç†å•†çš„ç½‘ç»œçŠ¶å†µ
 # * @Copyright (c) 007ka all right reserved 
 # * @updatelog: 
-# *             1.¸üĞÂ³ÌĞò±ê×¼»¯Âß¼­ĞÔ
-# *             2.ÓÅ»¯ÈÕÖ¾µÄÊä³ö
-# *		        3.°ÑÎÒ·½µ½¶Ô·½´úÀíÉÌµÄÍøÂç×´¿öÊä³öµ½ÈÕÖ¾ÖĞ
-# *		        4.°Ñpinglog.sh½Å±¾¼ÓÈëµ½¶¨Ê±ÈÎÎñÖĞ,eg : 0 0 * * * PATH_to/pinglog.sh
+# *             1.æ›´æ–°ç¨‹åºæ ‡å‡†åŒ–é€»è¾‘æ€§
+# *             2.ä¼˜åŒ–æ—¥å¿—çš„è¾“å‡º
+# *		        3.æŠŠæˆ‘æ–¹åˆ°å¯¹æ–¹ä»£ç†å•†çš„ç½‘ç»œçŠ¶å†µè¾“å‡ºåˆ°æ—¥å¿—ä¸­
+# *		        4.æŠŠpinglog.shè„šæœ¬åŠ å…¥åˆ°å®šæ—¶ä»»åŠ¡ä¸­,eg : 0 0 * * * /usr/local/007ka/new_sysmon/pinglog.sh &>/dev/null
 #**************************************************************************
 
 export LANG=zh_CN.GBK
@@ -22,18 +22,18 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 
-##Ô´IPµØÖ·
+##æºIPåœ°å€
 g_s_SRC_IP=$(ip addr | grep 'inet' | grep "10\.2" | grep -vw 'secondary' | awk -F['/'' '.]+ 'NR==1 {print $3"."$4"."$5"."$6}')
 
 
-###³ÌĞòÔËĞĞallÈÕÖ¾Êä³öÂ·¾¶
+###ç¨‹åºè¿è¡Œallæ—¥å¿—è¾“å‡ºè·¯å¾„
 g_s_LOG_PATH=/var/applog/ping
 
-###ÅäÖÃÎÄ¼şÂ·¾¶
+###é…ç½®æ–‡ä»¶è·¯å¾„
 g_s_Work_Inc="/usr/local/007ka/new_sysmon/partner_info.ini"
 
 if [ ! -f $g_s_Work_Inc ];then
-	echo "$g_s_Work_Inc ²»´æÔÚ£¡"
+	echo "$g_s_Work_Inc ä¸å­˜åœ¨ï¼"
 	exit $STATE_CRITICAL
 fi
 	
@@ -62,7 +62,7 @@ g_s_LOGDATE=`date +"%F"`
 
 
 ###check the run user
-###¼ì²âµ±Ç°ÓÃ»§ÊÇ·ñÎªapps£¬²»ÊÇÔòÍË³öÖ´ĞĞ
+###æ£€æµ‹å½“å‰ç”¨æˆ·æ˜¯å¦ä¸ºappsï¼Œä¸æ˜¯åˆ™é€€å‡ºæ‰§è¡Œ
 
 if [ `whoami` == "apps" ];then
 
@@ -83,6 +83,6 @@ if [ `whoami` == "apps" ];then
 		/bin/ping -i 1 $PARTNER_IP | awk '{print strftime("%Y%m%d %T",systime()),"src '$g_s_SRC_IP'" , "dst '$PARTNER_IP'"  "\t" $0}' >> $LOG_FILE &
 	done
 else
-	_err "·ÇappsÓÃ»§,ÍË³öÖ´ĞĞ"
+	_err "éappsç”¨æˆ·,é€€å‡ºæ‰§è¡Œ"
 	exit $STATE_WARNING
 fi
