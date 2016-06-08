@@ -1,0 +1,5 @@
+#配置文件格式
+#MASTER_IP:PORT MON_SRV_IP:PORT
+MASTER_IP线路中转地址_01:端口  MON_SRV中转地址_01:端口
+中转地址_02:端口  MON_SRV中转地址_02:端口
+中转地址_03:端口  MON_SRV中转地址_02:端口
