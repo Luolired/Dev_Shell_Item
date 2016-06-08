@@ -19,3 +19,11 @@
     【功能解读】：
     
  ![image](https://github.com/Luolired/Dev_Shell_Item/blob/master/bcp/img/QQ截图20160608091942.jpg)
+ 
+        [Info] 目标路径===存在同名文件:SmsCenter.jar 且已有软链接===整理完毕,旧版本: SmsCenter.20160606.jar;当前版本:SmsCenter.14107120160608.jar
+        [Info] 回滚脚本准备完毕:/home/lizx01/RollBack/SmsCenter.jar_14107120160608.sh
+
+ ![image](https://github.com/Luolired/Dev_Shell_Item/blob/master/bcp/img/111.jpg)    
+ ![image](https://github.com/Luolired/Dev_Shell_Item/blob/master/bcp/img/2222.jpg)
+  
+
