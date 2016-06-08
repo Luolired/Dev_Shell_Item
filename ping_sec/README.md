@@ -5,7 +5,7 @@ ping_sec 每秒ping不同地址，而且每天生成一份日志文件
   
   【复杂度】：一星
   
-  【关键节点】：
+  【关键节点】：定时任务切割天日志 0 0 * * * /usr/local/007ka/new_sysmon/pinglog.sh &>/dev/null
   ```
     LOG_FILE="${LOG_PATH}/ping-call.${g_s_LOGDATE}.log"
           PARTNER_IP=$( cat $g_s_Work_Inc|grep -v "^#"|awk -F "[=== ]+" '{print $2}'|sed -n "$i"p)
