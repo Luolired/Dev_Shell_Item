@@ -14,3 +14,4 @@
         $ /etc/nagios/nrpe.d/check_web_netstat.sh 80 100 150
         PROCS CRITICAL:80 Port Cureent_Netstat_Num:248 larger than that:150,124.127.181.102 32 maybed attacked our web!!!
     
+![image](https://github.com/Luolired/Dev_Shell_Item/blob/master/Check_web_netstat/888.jpg）
