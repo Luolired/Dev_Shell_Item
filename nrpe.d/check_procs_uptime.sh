@@ -79,11 +79,13 @@ then
 		if [ "$CTIME" -lt "$CRIT" ];then
 			Program_line=$(echo $line | awk '{print $NF}')
 			Program_pid=$(echo $line | awk '{print $2}')
+			rm -rf $Tmp_Check_Procs_Result &>/dev/null
 			echo "CRITICAL - Process $Program_pid $Program_line uptime is $TIME (dias-hrs) little $CRIT min|uptime=$CTIME"
 			exit $STATE_CRITICAL
 		else
 			if [ $i -eq $Check_Procs_Total ];then 
 				#检测到为最后一个
+				rm -rf $Tmp_Check_Procs_Result &>/dev/null
 				echo "OK Process all_total:$i uptime is larger than $CRIT min,Process all not restart"
 				exit $STATE_OK
 			fi
@@ -94,4 +96,3 @@ else
 	echo "WARANG - Nagios plugins $0 is Not Check Result:$Tmp_Check_Procs_Result,Please Check"
 	exit $STATE_WARNING
 fi
-rm -rf $Tmp_Check_Procs_Result &>/dev/null
