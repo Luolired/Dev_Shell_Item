@@ -4,11 +4,12 @@
 # * @file:check_proc_uptime.sh
 # * @author:Luolired@163.com 
 # * @date:2016-08-16 20:53 
-# * @version 0.1
+# * @version 1.0
 # * @description:本脚本用于检测应用程序或服务运行时间,从侧面来推断程序是否频繁重启或首次启动
 # * @Copyright (c) 007ka all right reserved 
 # * @updatelog:
 # *             1.遍历整个ps结果,无须挨个添加注册,检查程序的启动时间,判断为是否是首次启动或者频繁重启
+# *             2.修复致命bug,根据实际响应进行匹配获取对应单位天、小时、分钟
 # * @example:command[check_procs_uptime]=/etc/nagios/nrpe.d/check_procs_uptime.sh 5 
 #**************************************************************************/ 
 
@@ -20,7 +21,6 @@ STATE_WARNING=1
 STATE_CRITICAL=2
 STATE_UNKNOWN=3
 
-Sup_Clit_Cmd=/usr/bin/supervisorctl
 Tmp_Check_Procs_Result=/tmp/check_procs_uptime.tmp
 
 if [ "$1" == "" ]
@@ -44,37 +44,42 @@ then
 	cat $Tmp_Check_Procs_Result | while read line
 	do
 		TIME=$(echo $line | awk '{print $3}')
-		 
 		# FORMAT 28-03:27:2
-		# GET MINUTES
-		M=`echo $TIME|awk -F":" '{ print $2 }'`
-		 
-		# GET DAYS (ONLY IF THERE)
 		if [[ $TIME == *"-"* ]]
 		then
 			D=`echo $TIME|awk -F"-" '{ print $1 }'`
 			H=`echo $TIME|awk -F":" '{ print $1 }'|awk -F"-" '{ print $NF }'`
-			# CONVERT DAYS TO MIN
-			D=`expr $D \* 1440`
-		else
+			M=`echo $TIME|awk -F":" '{ print $2 }'`
+		elif [[ $TIME == *":"*":"* ]]
+		then		
+			#apps     62835    01:43:46 java -server -Xms64m -Xmx64m -jar 
+			D=0
 			H=`echo $TIME|awk -F":" '{ print $1 }'`
+			M=`echo $TIME|awk -F":" '{ print $2 }'`
+		else
+			#apps     25531       29:54 java -server -Xms128m -Xmx128m -jar
+			D=0
+			H=0
+			M=`echo $TIME|awk -F":" '{ print $1 }'`
 		fi
+		#echo "Day:$D Hour:$H Min:$M"
 		 
+		# CONVERT DAYS TO MIN
+		D=`expr $D \* 1440`
 		# CONVERT HOURS TO MIN
 		H=`expr $H \* 60`
-		#echo "D: $D H: $H M: $M"
 		CTIME=`expr $M + $H`
-		 
 		if [ ! -z "$D" ]; then
 			CTIME=`expr $CTIME + $D`
 		fi
+		#echo $CTIME
 		# CLEANUP
 		TIME=`echo ${TIME} | sed -e 's/^[ \t]*//'`
 		
 		if [ "$CTIME" -lt "$CRIT" ];then
 			Program_line=$(echo $line | awk '{print $NF}')
 			Program_pid=$(echo $line | awk '{print $2}')
-			echo "CRITICAL - Process $Program_pid $Program_line uptime is $TIME (dias-hrs) $CTIME min|uptime=$CTIME"
+			echo "CRITICAL - Process $Program_pid $Program_line uptime is $TIME (dias-hrs) little $CRIT min|uptime=$CTIME"
 			exit $STATE_CRITICAL
 		else
 			if [ $i -eq $Check_Procs_Total ];then 
