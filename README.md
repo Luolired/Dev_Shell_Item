@@ -4,7 +4,7 @@
 ## 运维鹰眼 Soc 【便捷搜索】
     生产服务器跑了4、5千应用程序，运维工作中如何从海量应用中定位到你要应用程序：地址、路径、运行pid、以及程序CMDB
     有了鹰眼一键帮你查询你需要的！
-    
+   ![image](https://github.com/Luolired/Dev_Shell_Item/blob/master/bcp/img/aaa.png)  
 
 ## bcp 带回滚的应用部署cp 【提高效率自动化部署】
     bcp复制文件到新目录，新目录若存在同名文件则备份并输出一个回滚脚本;若不存在直接复制。
