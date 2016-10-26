@@ -4,26 +4,28 @@
 # * 
 # * @file:bcp.sh 
 # * @author:Luolired@163.com 
-# * @date:2015-07-27 20:53 
-# * @version 7.3
-# * @description:¸´ÖÆÎÄ¼şµ½ĞÂÄ¿Â¼£¬ĞÂÄ¿Â¼Èô´æÔÚÍ¬ÃûÎÄ¼şÔò±¸·İ²¢Êä³öÒ»¸ö»Ø¹ö½Å±¾;Èô²»´æÔÚÖ±½Ó¸´ÖÆ
+# * @date:2016-10-26 20:53 
+# * @version 7.4
+# * @description:å¤åˆ¶æ–‡ä»¶åˆ°æ–°ç›®å½•ï¼Œæ–°ç›®å½•è‹¥å­˜åœ¨åŒåæ–‡ä»¶åˆ™å¤‡ä»½å¹¶è¾“å‡ºä¸€ä¸ªå›æ»šè„šæœ¬;è‹¥ä¸å­˜åœ¨ç›´æ¥å¤åˆ¶
 # * @Copyright (c) 007ka all right reserved 
-# * @UpdateLog: 1.Ôö¼ÓOAÁ÷Ë®ºÅ±êÊ¶°æ±¾
-# *             2.Ê×´Î¸´ÖÆÒ²Ôö¼ÓOAÁ÷Ë®ºÅ°æ±¾½øĞĞÈíÁ´½Ó
-# *             3.Ôö¼ÓÖ§³ÖÕë¶ÔÒ»¸öÎÄ¼şµÄ¸´ÖÆ
-# *             4.Ö÷Ìåº¯Êıg_fn_Director ·Ö½â
-# *             5.Ê×´ÎĞÂ¸´ÖÆÎÄ¼ş²»²úÉú»Ø¹ö½Å±¾
+# * @UpdateLog: 1.å¢åŠ OAæµæ°´å·æ ‡è¯†ç‰ˆæœ¬
+# *             2.é¦–æ¬¡å¤åˆ¶ä¹Ÿå¢åŠ OAæµæ°´å·ç‰ˆæœ¬è¿›è¡Œè½¯é“¾æ¥
+# *             3.å¢åŠ æ”¯æŒé’ˆå¯¹ä¸€ä¸ªæ–‡ä»¶çš„å¤åˆ¶
+# *             4.ä¸»ä½“å‡½æ•°g_fn_Director åˆ†è§£
+# *             5.é¦–æ¬¡æ–°å¤åˆ¶æ–‡ä»¶ä¸äº§ç”Ÿå›æ»šè„šæœ¬
+# *             6.å¢åŠ è¾“å‡ºç»“æœ,å†å²ç‰ˆæœ¬æ–‡ä»¶md5è¾“å‡º
+# *             7.ä¿®æ”¹å›æ»šæ—¶é—´ç¡®åˆ‡åˆ°åˆ†é’Ÿä½
 #**************************************************************************/ 
 export LANG=zh_CN.GBK
 
 sudo_user=apps
+#sudo_user=root
 #sudo_user=lizx01
-g_s_DataTime=`date +%Y%m%d`
+g_s_DataTime=$(date +%Y%m%d%H%M)
 
-g_p_ProGram_Path=$1       #½«ÒªÉÏÏßµÄ³ÌĞò°üÄ¿Â¼Â·¾¶/ÎÄ¼ş
-g_p_Dest_Path=$2          #Éú²úÄ¿±êÂ·¾¶
-g_i_OANUM=$3              #±¾´ÎÉÏÏßOAÁ÷Ë®ºÅ
-
+g_p_ProGram_Path=$1       #å°†è¦ä¸Šçº¿çš„ç¨‹åºåŒ…ç›®å½•è·¯å¾„/æ–‡ä»¶
+g_p_Dest_Path=$2          #ç”Ÿäº§ç›®æ ‡è·¯å¾„
+g_i_OANUM=$3              #æœ¬æ¬¡ä¸Šçº¿OAæµæ°´å·
 
 ### Print error messges eg:  _err "This is error"
 function _err()
@@ -42,21 +44,23 @@ function _content() {
     echo -e "\033[1;30m$@\033[0m"
 }
 
-### Ê¹ÓÃÒıµ¼help
+### ä½¿ç”¨å¼•å¯¼help
 if [ "$#" -lt 3 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
 	_content "=========================== Welcome ===================================="
-	_info "ÓÃÍ¾£ºcp¸´ÖÆÔ´ÎÄ¼ş»òÔ´Ä¿Â¼,µ½ĞÂÄ¿Â¼¡£Èô´æÔÚÍ¬ÃûÎÄ¼şÔò±¸·İ²¢Êä³öÒ»¸ö»Ø¹ö½Å±¾;Èô²»´æÔÚÖ±½Ó¸´ÖÆ"
 	echo 
-	_content "ÓÃ·¨£º$0 Ô´ÎÄ¼şÂ·¾¶Ä¿Â¼»òÔ´ÎÄ¼şÂ·¾¶ Ä¿±êÂ·¾¶Ä¿Â¼ OA±àºÅ"
+	_info "ç”¨é€”ï¼šcpå¤åˆ¶æºæ–‡ä»¶æˆ–æºç›®å½•,åˆ°æ–°ç›®å½•ã€‚è‹¥å­˜åœ¨åŒåæ–‡ä»¶åˆ™å¤‡ä»½å¹¶è¾“å‡ºä¸€ä¸ªå›æ»šè„šæœ¬;è‹¥ä¸å­˜åœ¨ç›´æ¥å¤åˆ¶"
+	echo 
+	_content "ç”¨æ³•ï¼š$0 æºæ–‡ä»¶è·¯å¾„ç›®å½•æˆ–æºæ–‡ä»¶è·¯å¾„ ç›®æ ‡è·¯å¾„ç›®å½• OAç¼–å·"
 	_info "Usage: $0 /home/lizx01/program_path /usr/local/007ka OANum" >&2
 	echo 
-	_content "Create Time:2016-05-04,Author:lizx 007ka-soc,V1.0"
-	_content "Modified Time:2016-05-04,V2.0,Add Cp Only File"
+	_content "ç‰ˆæƒæ‰€æœ‰,ç¦æ­¢ç›—ç‰ˆ:Create Time:2016-05-04,Author:lizx 007ka-soc,V7.4"
+	_content "Modified Time:2016-05-04,V2.0,Add md5sum deploy file"
+	echo 
 	_content "=========================== Welcome ===================================="
 	exit 1
 fi
 
-### g_p_Dest_Path Èô·Ç¾ø¶ÔÂ·¾¶(^/)Ôò½øĞĞ×ª»»£¬ÊÇ/$Ôò½øĞĞÌŞ³ı×îºó/×Ö·û,±£Ö¤Â·¾¶ÕıÈ·ĞÔ,×îÖÕµÃ³ö¾ø¶ÔÂ·¾¶£¡
+### g_p_Dest_Path è‹¥éç»å¯¹è·¯å¾„(^/)åˆ™è¿›è¡Œè½¬æ¢ï¼Œæ˜¯/$åˆ™è¿›è¡Œå‰”é™¤æœ€å/å­—ç¬¦,ä¿è¯è·¯å¾„æ­£ç¡®æ€§,æœ€ç»ˆå¾—å‡ºç»å¯¹è·¯å¾„ï¼
 if [ -d $g_p_Dest_Path ] 
 then
     echo $g_p_Dest_Path | grep -q '^/' || g_p_Dest_Path=$PWD/$g_p_Dest_Path
@@ -67,11 +71,11 @@ else
     exit 1
 fi
 
-### ´´½¨¾ßÌåµÄOANum+g_s_DataTime±àºÅ»Ø¹ö½Å±¾,ÖØ¸´ÔòÇå¿Õ
+### åˆ›å»ºå…·ä½“çš„OANum+g_s_DataTimeç¼–å·å›æ»šè„šæœ¬,é‡å¤åˆ™æ¸…ç©º
 function g_fn_Create_RollBack()
 {
 	proname=$1
-	### »Ø¹öÄ¿Â¼´´½¨
+	### å›æ»šç›®å½•åˆ›å»º
 	t_p_RollBack_Path=~/RollBack
 	if [ ! -d $t_p_RollBack_Path ]
 	then
@@ -85,13 +89,13 @@ function g_fn_Create_RollBack()
 	echo "${RollBack_PathFile}"
 }
 
-### »Øµ÷ĞÅÏ¢¼ÇÂ¼Ö¸Áîº¯Êı 
+### å›è°ƒä¿¡æ¯è®°å½•æŒ‡ä»¤å‡½æ•° 
 function g_fn_RollBack()
 {
 	echo "$*" >> $g_p_RollBack_PathFile
 }
 
-### g_fn_Rename º¯Êı,ÖØÃüÃûºóµÄ¹æ·¶¶¨Òå
+### g_fn_Rename å‡½æ•°,é‡å‘½ååçš„è§„èŒƒå®šä¹‰
 function g_fn_Rename()
 {   
     source_file_name=$1
@@ -107,71 +111,71 @@ function g_fn_Director()
     source_path=$2
     if [ -f ${g_p_Dest_Path}/${file_line} ]
     then
-        #$file_line ini/msgsrv.xml ¿ÉÄÜ´æÔÚ×ÓÄ¿Â¼subdirectory(ini),»Ø¹ö½Å±¾¾Í±ØĞëÇĞµ½iniÄ¿Â¼ÏÂ
+        #$file_line ini/msgsrv.xml å¯èƒ½å­˜åœ¨å­ç›®å½•subdirectory(ini),å›æ»šè„šæœ¬å°±å¿…é¡»åˆ‡åˆ°iniç›®å½•ä¸‹
         subdirectory=$(echo ${g_p_Dest_Path}/${file_line} |awk -F '/' 'BEGIN{OFS="/"};{if(NF>1)NF=NF-1;print $0}')
         
-        #ĞÂÄ¿Â¼Èô´æÔÚÍ¬ÃûÎÄ¼şÔò±¸·İ²¢Êä³öÒ»¸ö»Ø¹ö½Å±¾ readlink
+        #æ–°ç›®å½•è‹¥å­˜åœ¨åŒåæ–‡ä»¶åˆ™å¤‡ä»½å¹¶è¾“å‡ºä¸€ä¸ªå›æ»šè„šæœ¬ readlink
         if [ -L ${g_p_Dest_Path}/${file_line} ]
         then
             oldlink_file=$(ls -lh ${g_p_Dest_Path}/${file_line} |awk -F'->' '{print $NF}')
-            #×îÖÕ´ø±¾´ÎÉÏÏß±àºÅµÄÎÄ¼şÃû¸ñÊ½
+            #æœ€ç»ˆå¸¦æœ¬æ¬¡ä¸Šçº¿ç¼–å·çš„æ–‡ä»¶åæ ¼å¼
  	    dest_line=$(g_fn_Rename ${file_line} ${g_s_DataTime} ${g_i_OANUM})
-            #¸´ÖÆÎÄ¼şµ½Éú²úÂ·¾¶ÃüÃûÎª×îÖÕ´ø°æ±¾±àºÅÎÄ¼ş
+            #å¤åˆ¶æ–‡ä»¶åˆ°ç”Ÿäº§è·¯å¾„å‘½åä¸ºæœ€ç»ˆå¸¦ç‰ˆæœ¬ç¼–å·æ–‡ä»¶
             cd ${source_path} && sudo -u $sudo_user cp ${file_line} ${g_p_Dest_Path}/${dest_line}
-	    #¿ªÊ¼ÈíÁ´½Óµ½ĞÂ°æ±¾
+	    #å¼€å§‹è½¯é“¾æ¥åˆ°æ–°ç‰ˆæœ¬
 	    [ $? -eq 0 ] && cd ${g_p_Dest_Path} && sudo -u $sudo_user ln -sf $(echo $dest_line|awk -F '/' '{print $NF}') $file_line
             
-	    #»ØÍË½Å±¾£¬ÕâÀïÒªÕÒµ½Ö®Ç°ÈíÁ´½ÓµÄÔ´ÎÄ¼ş
-            #[ $? -eq 0 ] && echo "cd $subdirectory && sudo -u $sudo_user ln -sf $(echo $oldlink_file|awk -F '/' '{print $NF}') $(echo $file_line | awk -F '/' '{print $NF}')" >> ${g_p_RollBack_PathFile}
+	    #å›é€€è„šæœ¬ï¼Œè¿™é‡Œè¦æ‰¾åˆ°ä¹‹å‰è½¯é“¾æ¥çš„æºæ–‡ä»¶
             [ $? -eq 0 ] && g_fn_RollBack "cd $subdirectory && sudo -u $sudo_user ln -sf $(echo $oldlink_file|awk -F '/' '{print $NF}') $(echo $file_line | awk -F '/' '{print $NF}')"
-            _info "Ä¿±êÂ·¾¶===´æÔÚÍ¬ÃûÎÄ¼ş:$file_line ÇÒÒÑÓĞÈíÁ´½Ó===ÕûÀíÍê±Ï,¾É°æ±¾:${oldlink_file};µ±Ç°°æ±¾:${dest_line}"
+            _info "ç›®æ ‡è·¯å¾„===å­˜åœ¨åŒåæ–‡ä»¶:$file_line ä¸”å·²æœ‰è½¯é“¾æ¥===æ•´ç†å®Œæ¯•\n\tæ—§ç‰ˆæœ¬: $(cd ${g_p_Dest_Path} && md5sum ${oldlink_file}) \n\tå½“å‰ç‰ˆæœ¬:$(cd ${g_p_Dest_Path} && md5sum ${dest_line});"
 
         else
-            #Ä¿±êÂ·¾¶Î´´´½¨ÈíÁ´½Ó,ÏÈ´´½¨ÈíÁ´½Ó,ºóÌæ»»ÎªĞÂÈíÁ´½Ó¸ñÊ½¹æ·¶
+            #ç›®æ ‡è·¯å¾„æœªåˆ›å»ºè½¯é“¾æ¥,å…ˆåˆ›å»ºè½¯é“¾æ¥,åæ›¿æ¢ä¸ºæ–°è½¯é“¾æ¥æ ¼å¼è§„èŒƒ
             last_mtime=$(ls -l --time-style="+%Y%m%d" $g_p_Dest_Path/$file_line |awk '{print $(NF-1)}')
-            #×îºóÒ»´Î±à¼­Ê±¼ä´ø±àºÅµÄÎÄ¼şÃû¸ñÊ½
-	    #ÒòÎªÒÔÇ°¿ÉÄÜÃ»ÓĞ°æ±¾ºÅ×·Ëİ¼ÇÂ¼,ËùÒÔOANum ÌØ¶¨000000±êÊ¶
+            #æœ€åä¸€æ¬¡ç¼–è¾‘æ—¶é—´å¸¦ç¼–å·çš„æ–‡ä»¶åæ ¼å¼
+	    #å› ä¸ºä»¥å‰å¯èƒ½æ²¡æœ‰ç‰ˆæœ¬å·è¿½æº¯è®°å½•,æ‰€ä»¥OANum ç‰¹å®š000000æ ‡è¯†
             source_line=$(g_fn_Rename ${file_line} ${last_mtime} 000000 )
-	    #»ØÍË½Å±¾»ØÍË0000000°æ±¾,×î³õ°æ±¾
+	    #å›é€€è„šæœ¬å›é€€0000000ç‰ˆæœ¬,æœ€åˆç‰ˆæœ¬
             #[ $? -eq 0 ] && echo "cd $subdirectory && sudo -u $sudo_user ln -sf $(echo $source_line|awk -F '/' '{print $NF}') $(echo $file_line | awk -F '/' '{print $NF}')" >> ${g_p_RollBack_PathFile}
             [ $? -eq 0 ] && g_fn_RollBack "cd $subdirectory && sudo -u $sudo_user ln -sf $(echo $source_line|awk -F '/' '{print $NF}') $(echo $file_line | awk -F '/' '{print $NF}')"
-            #ÒòÎªÎ´´´½¨ÈíÁ´½Ó,ÏÈ½«µ±ÆÚÔÚÓÃ°æ±¾½øĞĞ¸´ÖÆ³ÉËü×îºóÒ»´Î±à¼­Ê±¼äµ±×ö°æ±¾ºÅ
+            #å› ä¸ºæœªåˆ›å»ºè½¯é“¾æ¥,å…ˆå°†å½“æœŸåœ¨ç”¨ç‰ˆæœ¬è¿›è¡Œå¤åˆ¶æˆå®ƒæœ€åä¸€æ¬¡ç¼–è¾‘æ—¶é—´å½“åšç‰ˆæœ¬å·
             sudo -u $sudo_user cp ${g_p_Dest_Path}/${file_line} ${g_p_Dest_Path}/${source_line}
             
-            #×îÖÕ´ø±¾´ÎÉÏÏß±àºÅµÄÎÄ¼şÃû¸ñÊ½
+            #æœ€ç»ˆå¸¦æœ¬æ¬¡ä¸Šçº¿ç¼–å·çš„æ–‡ä»¶åæ ¼å¼
             dest_line=$(g_fn_Rename ${file_line} ${g_s_DataTime} ${g_i_OANUM})
-            #¸´ÖÆÎÄ¼şµ½Éú²úÂ·¾¶ÃüÃûÎª×îÖÕ´ø°æ±¾±àºÅÎÄ¼ş
+            #å¤åˆ¶æ–‡ä»¶åˆ°ç”Ÿäº§è·¯å¾„å‘½åä¸ºæœ€ç»ˆå¸¦ç‰ˆæœ¬ç¼–å·æ–‡ä»¶
             cd $source_path && sudo -u $sudo_user cp $file_line ${g_p_Dest_Path}/${dest_line} 
-	    #¿ªÊ¼ÈíÁ´½Óµ½ĞÂ°æ±¾
+	    #å¼€å§‹è½¯é“¾æ¥åˆ°æ–°ç‰ˆæœ¬
 	    [ $? -eq 0 ] && cd $g_p_Dest_Path && sudo -u $sudo_user ln -sf $(echo $dest_line|awk -F '/' '{print $NF}') $file_line
-            _info "Ä¿±êÂ·¾¶===´æÔÚÍ¬ÃûÎÄ¼ş:$file_line ÎŞÈíÁ´½Ó¹æ·¶===ÕûÀíÍê±Ï,¾É°æ±¾ÖØÃüÃûÎª:${source_line};µ±Ç°°æ±¾:${dest_line}"
+            _info "ç›®æ ‡è·¯å¾„===å­˜åœ¨åŒåæ–‡ä»¶:$file_line æ— è½¯é“¾æ¥è§„èŒƒ===æ•´ç†å®Œæ¯•\n\tæ—§ç‰ˆæœ¬é‡å‘½åä¸º:$(cd $g_p_Dest_Path && md5sum ${source_line});\n\tå½“å‰ç‰ˆæœ¬:$(cd $g_p_Dest_Path && md5sum ${dest_line});"
         fi
-    ### Éú²úÄ¿±êÂ·¾¶Ã»ÓĞÖØÃûÎÄ¼şÅ¶,ÒâÎ¶×ÅÊÇÊ×´Î¸´ÖÆ
+    ### ç”Ÿäº§ç›®æ ‡è·¯å¾„æ²¡æœ‰é‡åæ–‡ä»¶å“¦,æ„å‘³ç€æ˜¯é¦–æ¬¡å¤åˆ¶
     else
 	if echo ${file_line}| grep -q '/'       
     	then 
-    	    #×¢Òâ:ÏÈÒª½øĞĞ×ÓÄ¿Â¼µÄ´´½¨,·ñÔò:
-            #cp: ÎŞ·¨´´½¨ÆÕÍ¨ÎÄ¼ş"/home/lizx/guom01/proget/ini/msgsrv.xml": Ã»ÓĞiniÎÄ¼ş»òÄ¿Â¼,ËùÒÔÏÈĞèÒª´´½¨iniÄ¿Â¼
-            #ĞÂÄ¿Â¼²»´æÔÚÍ¬ÃûÎÄ¼ş£¬Ôò½øĞĞ¸´ÖÆ£¬¸´ÖÆÊ±½øĞĞÇø·ÖÊÇ£¬¸´ÖÆµÄÊÇÎÄ¼ş»¹ÊÇÄ¿Â¼£¬·Ö±ğ´¦Àí
-            #ÏÈ»ñµÃ$file_lineµÄÄ¿Â¼Â·¾¶
+    	    #æ³¨æ„:å…ˆè¦è¿›è¡Œå­ç›®å½•çš„åˆ›å»º,å¦åˆ™:
+            #cp: æ— æ³•åˆ›å»ºæ™®é€šæ–‡ä»¶"/home/lizx/guom01/proget/ini/msgsrv.xml": æ²¡æœ‰iniæ–‡ä»¶æˆ–ç›®å½•,æ‰€ä»¥å…ˆéœ€è¦åˆ›å»ºiniç›®å½•
+            #æ–°ç›®å½•ä¸å­˜åœ¨åŒåæ–‡ä»¶ï¼Œåˆ™è¿›è¡Œå¤åˆ¶ï¼Œå¤åˆ¶æ—¶è¿›è¡ŒåŒºåˆ†æ˜¯ï¼Œå¤åˆ¶çš„æ˜¯æ–‡ä»¶è¿˜æ˜¯ç›®å½•ï¼Œåˆ†åˆ«å¤„ç†
+            #å…ˆè·å¾—$file_lineçš„ç›®å½•è·¯å¾„
             directories=$(dirname "$g_p_Dest_Path/$file_line")
-            sudo -u $sudo_user mkdir -p $directories && _info "=== Ä¿±êÂ·¾¶ÎŞÍ¬ÃûÄ¿Â¼:$directoriesÄ¿Â¼Ê×´Î´´½¨Íê±Ï==="
+            sudo -u $sudo_user mkdir -p $directories && _info "=== ç›®æ ‡è·¯å¾„æ— åŒåç›®å½•:$directoriesç›®å½•é¦–æ¬¡åˆ›å»ºå®Œæ¯•===;"
 	fi
-	#¿ªÊ¼¶ÔÎÄ¼ş½øĞĞ´¦Àí,ÎÄ¼şÊ×´Î¸´ÖÆ,ĞèÒª½¨Á¢ÈíÁ¬½Ó
-        #×îÖÕ´ø±¾´ÎÉÏÏß±àºÅµÄÎÄ¼şÃû¸ñÊ½
+	#å¼€å§‹å¯¹æ–‡ä»¶è¿›è¡Œå¤„ç†,æ–‡ä»¶é¦–æ¬¡å¤åˆ¶,éœ€è¦å»ºç«‹è½¯è¿æ¥
+        #æœ€ç»ˆå¸¦æœ¬æ¬¡ä¸Šçº¿ç¼–å·çš„æ–‡ä»¶åæ ¼å¼
 	dest_line=$(g_fn_Rename ${file_line} ${g_s_DataTime} ${g_i_OANUM})
-	#¸´ÖÆÎÄ¼şµ½Éú²úÂ·¾¶ÃüÃûÎª×îÖÕ´ø°æ±¾±àºÅÎÄ¼ş
+	#å¤åˆ¶æ–‡ä»¶åˆ°ç”Ÿäº§è·¯å¾„å‘½åä¸ºæœ€ç»ˆå¸¦ç‰ˆæœ¬ç¼–å·æ–‡ä»¶
 	cd $source_path && sudo -u $sudo_user cp $file_line ${g_p_Dest_Path}/${dest_line}
-        #¿ªÊ¼ÈíÁ´½Óµ½ĞÂ°æ±¾
+        #å¼€å§‹è½¯é“¾æ¥åˆ°æ–°ç‰ˆæœ¬
         [ $? -eq 0 ] && cd $g_p_Dest_Path && sudo -u $sudo_user ln -sf $(echo $dest_line|awk -F '/' '{print $NF}') $file_line
-        _info "=== Ä¿±êÂ·¾¶ÎŞÍ¬ÃûÎÄ¼ş:$file_lineÎÄ¼şÊ×´Î¸´ÖÆ&ÈíÁ´½ÓÍê±Ï===µ±Ç°°æ±¾:${dest_line}"
-	_info "=== Ê×´Î¸´ÖÆ²»²úÉú»Ø¹ö½Å±¾ ==="
+        _info "=== ç›®æ ‡è·¯å¾„æ— åŒåæ–‡ä»¶:$file_lineæ–‡ä»¶é¦–æ¬¡å¤åˆ¶&è½¯é“¾æ¥å®Œæ¯•===\n\t å½“å‰ç‰ˆæœ¬:$(cd $g_p_Dest_Path && md5sum ${dest_line})"
+	_info "=== é¦–æ¬¡å¤åˆ¶ä¸äº§ç”Ÿå›æ»šè„šæœ¬ ===;"
     fi
 }
 
 function main()
 {
-	#### g_p_ProGram_Path Èô·Ç¾ø¶ÔÂ·¾¶(^/)Ôò½øĞĞ×ª»»£¬ÊÇ/$Ôò½øĞĞÌŞ³ı×îºó/×Ö·û,±£Ö¤Â·¾¶ÕıÈ·ĞÔ,×îÖÕµÃ³ö¾ø¶ÔÂ·¾¶£¡
+	_info "Now Let us Start Work Job:\n\tæœ¬æ¬¡ä¸Šçº¿OAæµæ°´å·:${g_i_OANUM} å°†è¦ä¸Šçº¿çš„ç¨‹åºåŒ…ç›®å½•è·¯å¾„æˆ–æ–‡ä»¶:${g_p_ProGram_Path} ç”Ÿäº§ç›®æ ‡è·¯å¾„:${g_p_Dest_Path}"
+	#### g_p_ProGram_Path è‹¥éç»å¯¹è·¯å¾„(^/)åˆ™è¿›è¡Œè½¬æ¢ï¼Œæ˜¯/$åˆ™è¿›è¡Œå‰”é™¤æœ€å/å­—ç¬¦,ä¿è¯è·¯å¾„æ­£ç¡®æ€§,æœ€ç»ˆå¾—å‡ºç»å¯¹è·¯å¾„ï¼
 	if [ -d "$g_p_ProGram_Path" ] 
 	then
 		echo $g_p_ProGram_Path | grep -q '^/' || g_p_ProGram_Path=$PWD/$g_p_ProGram_Path
@@ -180,30 +184,30 @@ function main()
 
 		g_p_RollBack_PathFile=$(g_fn_Create_RollBack $tmp_proname)	
 	
-		### ºËĞÄÖ÷Ìå:±éÀúÎÄ¼ş
-		### ×¢ÒâÎÄ¼şÂ·¾¶ÒÑ¾­ÇĞ»»µ½ÁË$g_p_ProGram_PathÏÂ
+		### æ ¸å¿ƒä¸»ä½“:éå†æ–‡ä»¶
+		### æ³¨æ„æ–‡ä»¶è·¯å¾„å·²ç»åˆ‡æ¢åˆ°äº†$g_p_ProGram_Pathä¸‹
 		cd $g_p_ProGram_Path && find ./ -type f |sed 's/\.\///g'|sort | while read tmp_file_line
 		do
 			g_fn_Director $tmp_file_line $g_p_ProGram_Path
 		done
 	else
-	    	### g_p_ProGram_Path ÈôÊÇÎÄ¼şÔòÖ»½øĞĞÕâÒ»¸öÎÄ¼şµÄ¸´ÖÆµ½Ä¿±êÄ¿Â¼ÏÂ
+	    	### g_p_ProGram_Path è‹¥æ˜¯æ–‡ä»¶åˆ™åªè¿›è¡Œè¿™ä¸€ä¸ªæ–‡ä»¶çš„å¤åˆ¶åˆ°ç›®æ ‡ç›®å½•ä¸‹
 	    	if [ -f $g_p_ProGram_Path ];then
-	    		_content "$g_p_ProGram_Path is type f"
+	    		_content "\t $g_p_ProGram_Path is type f $(md5sum $g_p_ProGram_Path)"
 			tmp_file_line=$(basename "$g_p_ProGram_Path" | awk '{print $1}')
 			tmp_file_path=$(dirname "$g_p_ProGram_Path" | awk '{print $1}')
 			g_p_RollBack_PathFile=$(g_fn_Create_RollBack $tmp_file_line)
 			g_fn_Director $tmp_file_line $tmp_file_path
 	    	else
-			_err "[ERROR]$g_p_ProGram_Path is not directory or file exist."
-			exit 1
+				_err "[ERROR]$g_p_ProGram_Path is not directory or file exist."
+				exit 1
 	    	fi
 	fi
 	
 	if [ -f "${g_p_RollBack_PathFile}" ]
 	then
 		chmod +x "${g_p_RollBack_PathFile}"
-		_info "»Ø¹ö½Å±¾×¼±¸Íê±Ï:${g_p_RollBack_PathFile}"
+		_info "å›æ»šè„šæœ¬å‡†å¤‡å®Œæ¯•:${g_p_RollBack_PathFile}"
 		exit 0
 	fi
 }
