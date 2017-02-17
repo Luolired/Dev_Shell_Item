@@ -2,6 +2,8 @@
 > rm_backup.txt是重定义的mv与rm指令，主要改动rm指令。
 本上是偷换了概念，把rm命令转换成了mv命令，但是能够达到我想要的效果，只不过在习惯性的敲入－r 参数时会报出一个错误，因为mv命令没有－r参数嘛
 
+> 呵呵,如此操作则不报错了，强烈推荐
+
 ![image](https://github.com/Luolired/Dev_Shell_Item/blob/master/rm/clipboard.png) 
 
   自我创新实现的，复制如下代码加入到.bashrc：
